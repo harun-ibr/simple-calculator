@@ -6,8 +6,8 @@ os.system('cls')
 root = Tk()
 root.title("Calculator")
 
-e = Entry(root, width = 58, borderwidth = 5)
-e.grid(row = 0, column = 0, columnspan = 4, padx = 10, pady = 10)
+e = Entry(root, width = 20, borderwidth = 2, font = ('Arial 24'))
+e.grid(row = 0, column = 0, columnspan = 4, padx = 10, pady = 20)
 
 brojevi = []
 
@@ -17,6 +17,7 @@ def get_last_number(lista):
     while not error and len(lista) > 0:
         try:
             a = int(lista[-1])
+            # print(a)
             if isinstance(a, int) or a == ".":
                 last_number += str(a)
                 lista.pop(-1)
@@ -26,15 +27,16 @@ def get_last_number(lista):
                 lista.pop(-1)
             else:
                 error = True
+        # print(last_number)
     lista.append(last_number[::-1])
-    print(lista) 
+    # print(lista)
     return lista
 
 def button_click(char):
     brojevi.append(char)
     e.delete(0, END)
-    e.insert(0, brojevi)
-    print(brojevi)
+    e.insert(0, ''.join(brojevi))
+    # print(brojevi)
     
 def erase():
     e.delete(0, END)
@@ -46,15 +48,22 @@ def equals():
     global brojevi
     string_lista = ''.join(brojevi)
     brojevi = []
-    evaluate = eval(string_lista)
-    e.insert(0, evaluate)
+    evaluate = str(eval(string_lista))
+    for i in evaluate:
+        brojevi.append(i)
+    e.insert(0, ''.join(evaluate))
+    # print(brojevi)
 
 def korijen():
     get_last_number(brojevi)
-    brojevi.append(str(sqrt(float(brojevi[-1]))))
-    brojevi.pop(-2)
+    # print(brojevi)
+    rezultat = str(sqrt(float(brojevi[-1])))
+    brojevi.pop(-1)
+    for n in rezultat:
+        brojevi.append(n)
     e.delete(0, END)
-    e.insert(0, brojevi)
+    e.insert(0, ''.join(brojevi))
+    # print(f"korjen {brojevi}")
     
 # define buttons
 
@@ -142,6 +151,5 @@ open.grid(row = 8, column = 0, columnspan = 2, sticky = 'ew')
 close.grid(row = 8, column = 2, columnspan = 2, sticky = 'ew')
 
 # button_test.grid(row = 7, column = 1)
-
 
 root.mainloop()
