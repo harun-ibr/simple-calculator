@@ -54,10 +54,15 @@ def equals():
     e.insert(0, ''.join(evaluate))
     # print(brojevi)
 
-def korijen():
+def operacija(operation):
     get_last_number(brojevi)
     # print(brojevi)
-    rezultat = str(sqrt(float(brojevi[-1])))
+    if operation == 'korijen':
+        rezultat = str(sqrt(float(brojevi[-1])))
+    elif operation == 'kvadrat':
+        rezultat = str((float(brojevi[-1]))**2)
+    elif operation == 'reciprocno':
+        rezultat = str(1/(float(brojevi[-1])))
     brojevi.pop(-1)
     for n in rezultat:
         brojevi.append(n)
@@ -65,6 +70,54 @@ def korijen():
     e.insert(0, ''.join(brojevi))
     # print(f"korjen {brojevi}")
     
+def backspace():
+    brojevi.pop(-1)
+    e.delete(0, END)
+    e.insert(0, ''.join(brojevi))
+    # print(brojevi)
+
+def percentage():
+    global brojevi
+    get_last_number(brojevi)
+    if len(brojevi) > 1:
+        postotak = float(brojevi[-1])
+        last_operation = brojevi[-2]
+        brojevi.pop(-1)
+        brojevi.pop(-1)
+        string_lista = ''.join(brojevi)
+        brojevi = []
+        evaluate = str(eval(string_lista))
+        evaluate_float = eval(string_lista)
+        for i in evaluate:
+            brojevi.append(i)
+        brojevi.append(last_operation)
+        rezultat = str(postotak/100 * evaluate_float)
+        for n in rezultat:
+            brojevi.append(n)
+        equals()
+    else:
+        return
+
+def change_sign():
+    global brojevi
+    get_last_number(brojevi)
+    print(brojevi)
+    rezultat = float(brojevi[-1])*(-1)
+    brojevi.pop(-1)
+    sign = ''
+    if brojevi[-1] == '+':
+        brojevi.pop(-1)
+    elif brojevi[-1] == '-':
+        brojevi.pop(-1)
+        sign = 'minus'
+    for i in str(rezultat):
+        if sign == 'minus' and i == '-':
+            brojevi.append('+')
+        else:
+            brojevi.append(i)
+    e.delete(0, END)
+    e.insert(0, ''.join(brojevi))
+
 # define buttons
 
 mc = Button(root, text = "MC", padx = 20, pady = 10)
@@ -74,13 +127,13 @@ m_minus = Button(root, text = "M-", padx = 20, pady = 10)
 ms = Button(root, text = "MS", padx = 20, pady = 10)
 m_list = Button(root, text = "M?", padx = 20, pady = 10)
 
-percentage = Button(root, text = "%", padx = 40, pady = 20)
-clear_e = Button(root, text = "CE", padx = 40, pady = 20)
+button_percentage = Button(root, text = "%", padx = 40, pady = 20, command = percentage)
+clear_e = Button(root, text = "CE", padx = 40, pady = 20, command = erase)
 clear = Button(root, text = "C", padx = 41, pady = 20, command = erase)
-delete = Button(root, text = "<x", padx = 40, pady = 20)
+delete = Button(root, text = "<-x-", padx = 40, pady = 20, command = backspace)
 
-one_ove_x = Button(root, text = "1/x", padx = 40, pady = 20)
-x_squared = Button(root, text = "x^2", padx = 40, pady = 20)
+one_ove_x = Button(root, text = "1/x", padx = 40, pady = 20, command = lambda: operacija('reciprocno'))
+x_squared = Button(root, text = "x^2", padx = 40, pady = 20, command = lambda: operacija('kvadrat'))
 
 open = Button(root, text = "(", padx = 80, pady = 20, command = lambda: button_click("("))
 close = Button(root, text = ")", padx = 80, pady = 20, command = lambda: button_click(")"))
@@ -102,8 +155,8 @@ multiply = Button(root, text = "*", padx = 40, pady = 20, command = lambda: butt
 divide = Button(root, text = "/", padx = 40, pady = 20, command = lambda: button_click("/"))
 button_equals = Button(root, text = "=", padx = 39, pady = 20, command = equals)
 dot = Button(root, text = ".", padx = 41, pady = 20, command = lambda: button_click("."))
-plus_minus = Button(root, text = "+/-", padx = 41, pady = 20, command = lambda: button_click("."))
-button_sqrt = Button(root, text = "√", padx = 41, pady = 20, command = korijen)
+plus_minus = Button(root, text = "+/-", padx = 41, pady = 20, command = change_sign)
+button_sqrt = Button(root, text = "√", padx = 41, pady = 20, command = lambda: operacija('korijen'))
 
 # button_test = Button(root, text = "test", padx = 85, pady = 20, command = lambda: get_last_number(brojevi))
 
@@ -116,7 +169,7 @@ button_sqrt = Button(root, text = "√", padx = 41, pady = 20, command = korijen
 # ms.grid(row = 1, column = 4)
 # m_list.grid(row = 1, column = 5)
 
-percentage.grid(row = 2, column = 0, sticky = 'ew')
+button_percentage.grid(row = 2, column = 0, sticky = 'ew')
 clear_e.grid(row = 2, column = 1, sticky = 'ew')
 clear.grid(row = 2, column = 2, sticky = 'ew')
 delete.grid(row = 2, column = 3, sticky = 'ew')
