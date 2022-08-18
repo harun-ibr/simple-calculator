@@ -158,6 +158,25 @@ dot = Button(root, text = ".", padx = 41, pady = 20, command = lambda: button_cl
 plus_minus = Button(root, text = "+/-", padx = 41, pady = 20, command = change_sign)
 button_sqrt = Button(root, text = "√", padx = 41, pady = 20, command = lambda: operacija('korijen'))
 
+# KEYBOARD BINDS
+button_clicks = ["(", ")", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "+", "-", "*", "/", ".",]
+
+def key_pressed(event):
+    key = event.char
+    symbol = event.keysym
+    if key in button_clicks:
+        button_click(key)
+    elif symbol == 'Return':
+        equals()
+    elif key == "%":
+        percentage()
+    elif symbol == "BackSpace":
+        backspace()
+    elif symbol == "Delete":
+        erase()
+
+root.bind("<Key>", key_pressed)
+
 # button_test = Button(root, text = "test", padx = 85, pady = 20, command = lambda: get_last_number(brojevi))
 
 # place buttons
